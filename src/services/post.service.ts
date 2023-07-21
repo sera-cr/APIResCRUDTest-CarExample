@@ -14,6 +14,8 @@ export function getPosts() {
       title: true,
       published: true,
       id: true,
+      createdAt: true,
+      updatedAt: true,
       author: {
         select: {
           name: true,
