@@ -8,6 +8,8 @@ import postRoutes from "./v1/routes/post.route.js";
 import { userSchemas } from "./schemas/user.schema.js";
 import { postSchemas } from "./schemas/post.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
+import swagger from "@fastify/swagger";
+import { withRefResolver } from "fastify-zod";
 
 
 export const server: FastifyInstance = Fastify({});
@@ -64,6 +66,31 @@ const start = async() => {
   for (const schema of [...postSchemas, ...userSchemas]) {
     server.addSchema(schema);
   }
+
+  server.register(
+    swagger,
+    withRefResolver({
+      swagger: {
+        info: {
+          title: 'Fastify API',
+          description: 'API for posts',
+          version: '1.0.0'
+        },
+        securityDefinitions: {
+          apiKey: {
+            type: 'apiKey',
+            name: 'apiKey',
+            in: 'header'
+          }
+        },
+        host: `${host}:${port}`,
+        schemes: ['http'],
+        consumes: ['application/json'],
+        produces: ['application/json']
+      },
+      hideUntagged: true
+    })
+  )
   
   server.register(userRoutes, {prefix: `api/${api_version}/users`})
   server.register(postRoutes, {prefix: `api/${api_version}/posts`})
