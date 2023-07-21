@@ -1,6 +1,6 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { registerUserHandler } from "../../controllers/user.controller.js";
-import { $ref } from "src/schemas/user.schema.js";
+import { $ref } from "../../schemas/user.schema.js";
 
 const opts: RouteShorthandOptions = {
     schema: {

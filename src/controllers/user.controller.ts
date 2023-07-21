@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput } from "src/schemas/user.schema.js";
-import { createUser } from "src/services/user:service.js";
+import { CreateUserInput } from "../schemas/user.schema.js";
+import { createUser } from "../services/user.service.js";
 
 export async function registerUserHandler(
   request: FastifyRequest<{

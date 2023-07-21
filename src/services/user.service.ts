@@ -1,6 +1,6 @@
-import { CreateUserInput } from "src/schemas/user.schema.js";
+import { CreateUserInput } from "../schemas/user.schema.js";
 import prisma from "../utils/prisma.js";
-import { hashPassword } from "src/utils/hash.js";
+import { hashPassword } from "../utils/hash.js";
 
 export async function createUser(input: CreateUserInput) {
 
