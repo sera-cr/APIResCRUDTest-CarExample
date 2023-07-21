@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, LoginInput } from "../schemas/user.schema.js";
-import { createUser, findUserByEmail, findUsers } from "../services/user.service.js";
+import { CreateUserInput, DeleteInput, LoginInput } from "../schemas/user.schema.js";
+import { createUser, deleteUser, findUserByEmail, findUsers } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
 
@@ -63,4 +63,33 @@ export async function getUsersHandler() {
   const users = await findUsers()
 
   return users;
+}
+
+export async function deleteUserHandler(
+  request: FastifyRequest<{
+    Body: DeleteInput
+  }>,
+  reply: FastifyReply
+) {
+  const body = request.body;
+
+  // find user by email
+  const user = await findUserByEmail(body.email);
+
+  if (!user) {
+    return reply.code(401).send({
+      message: "Invalid email or password"
+    });
+  }
+
+  // deleting user
+  try {
+    const deleted = await deleteUser(user.email);
+
+    return reply.code(200).send(deleted);
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
 }

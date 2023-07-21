@@ -32,3 +32,11 @@ export async function findUsers() {
     }
   });
 }
+
+export async function deleteUser(email: string) {
+  return prisma.user.delete({
+    where: {
+      email,
+    }
+  })
+}
