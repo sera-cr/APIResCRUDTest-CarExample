@@ -39,17 +39,15 @@ const start = async () => {
 start()
 */
 import Fastify, { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { listenOptions } from "../config/listenOptions.config.js"
+import { listenOptions } from "../config/listenOptions.config.js";
+import userRoutes from "./v1/routes/user.route.js";
 
 
 const server: FastifyInstance = Fastify({});
 
-/*const port: number = parseInt(process.env.DEV_PORT || '');
-
-const host = process.env.DEV_HOST || '0.0.0.0';*/
-
 let port: number;
 let host: string;
+const api_version: string = listenOptions.api_version;
 
 switch(listenOptions.status) {
   case 'production':
@@ -66,28 +64,9 @@ switch(listenOptions.status) {
     process.exit(1);
 }
 
-
-const opts: RouteShorthandOptions = {
-  schema: {
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          pong: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
-}
-
-server.get('/ping', opts, async (request, reply) => {
-  console.log("PONG");
-  return { pong: 'it worked!' }
-})
-
 const start = async() => {
+  server.register(userRoutes, {prefix: `api/${api_version}/users`})
+
   try {
     await server.listen({port: port, host: host});
 
