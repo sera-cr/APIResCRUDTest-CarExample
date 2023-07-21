@@ -57,4 +57,5 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   loginResponseSchema,
   deleteSchema,
   deleteResponseSchema
-})
+},
+{ $id: "UserSchema" })

@@ -1,10 +1,12 @@
-import Fastify, { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from "fastify";
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 // common js import
 import pkg from "@fastify/jwt";
 const { fastifyJwt } = pkg;
 import { listenOptions } from "../config/listenOptions.config.js";
 import userRoutes from "./v1/routes/user.route.js";
+import postRoutes from "./v1/routes/post.route.js";
 import { userSchemas } from "./schemas/user.schema.js";
+import { postSchemas } from "./schemas/post.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
 
 
@@ -13,6 +15,16 @@ export const server: FastifyInstance = Fastify({});
 declare module "fastify" {
   export interface FastifyInstance {
     authenticate: any;
+  }
+}
+
+declare module '@fastify/jwt' {
+  interface FastifyJWT {
+	  user: {
+      id: number;
+      email: string;
+      name: string;
+    }
   }
 }
 
@@ -49,11 +61,12 @@ switch(listenOptions.status) {
 
 const start = async() => {
 
-  for (const schema of userSchemas) {
+  for (const schema of [...postSchemas, ...userSchemas]) {
     server.addSchema(schema);
   }
-
+  
   server.register(userRoutes, {prefix: `api/${api_version}/users`})
+  server.register(postRoutes, {prefix: `api/${api_version}/posts`})
 
   try {
     await server.listen({port: port, host: host});
