@@ -41,6 +41,7 @@ start()
 import Fastify, { FastifyInstance, RouteShorthandOptions } from "fastify";
 import { listenOptions } from "../config/listenOptions.config.js";
 import userRoutes from "./v1/routes/user.route.js";
+import { userSchemas } from "./schemas/user.schema.js";
 
 
 const server: FastifyInstance = Fastify({});
@@ -65,6 +66,11 @@ switch(listenOptions.status) {
 }
 
 const start = async() => {
+
+  for (const schema of userSchemas) {
+    server.addSchema(schema);
+  }
+
   server.register(userRoutes, {prefix: `api/${api_version}/users`})
 
   try {
