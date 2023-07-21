@@ -10,6 +10,12 @@ import { jwtConfig } from "../config/jwt.config.js";
 
 export const server: FastifyInstance = Fastify({});
 
+declare module "fastify" {
+  export interface FastifyInstance {
+    authenticate: any;
+  }
+}
+
 server.register(fastifyJwt, {
   secret: jwtConfig.secret
 });

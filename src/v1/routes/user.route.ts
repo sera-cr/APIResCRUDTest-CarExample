@@ -1,21 +1,6 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { loginHandler, registerUserHandler } from "../../controllers/user.controller.js";
+import { getUsersHandler, loginHandler, registerUserHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
-
-const opts: RouteShorthandOptions = {
-    schema: {
-      response: {
-        200: {
-          type: 'object',
-            properties: {
-              users: {
-                type: 'string'
-              }
-            }
-        }
-      }
-    }
-  }
 
 async function userRoutes(server: FastifyInstance) {
   server
@@ -37,6 +22,11 @@ async function userRoutes(server: FastifyInstance) {
         }
       }
     }, loginHandler)
+    // list of users
+    .get("/", {
+      preHandler: [server.authenticate],
+    },
+    getUsersHandler)
 }
 
 export default userRoutes;
