@@ -10,7 +10,8 @@ async function userRoutes(server: FastifyInstance) {
         body: $ref('createUserSchema'),
         response: {
           201: $ref("createUserResponseSchema"),
-        }
+        },
+        tags: ["User"]
       }
     }, registerUserHandler)
     // login user
@@ -19,12 +20,16 @@ async function userRoutes(server: FastifyInstance) {
         body: $ref('loginSchema'),
         response: {
           200: $ref('loginResponseSchema')
-        }
+        },
+        tags: ["User"]
       }
     }, loginHandler)
     // list of users
     .get("/", {
       preHandler: [server.authenticate],
+      schema: {
+        tags:["User"]
+      }
     }, getUsersHandler)
     // delete user
     .delete("/", {
@@ -33,7 +38,8 @@ async function userRoutes(server: FastifyInstance) {
         body: $ref('deleteSchema'),
         response: {
           200: $ref('deleteResponseSchema')
-        }
+        },
+        tags: ["User"]
       }
     }, deleteUserHandler)
 }

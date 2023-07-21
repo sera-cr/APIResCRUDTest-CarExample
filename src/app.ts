@@ -73,7 +73,8 @@ const swaggerOptions = {
     schemes: ["http", "https"],
     consumes: ["application/json"],
     produces: ["application/json"],
-    tags: [{ name: "Default", description: "Default" }],
+    tags: [{ name: "User", description: "Endpoints CRUD about Users data." },
+           { name: "Post", description: "Endpoints CRUD about Posts data."}],
   },
 };
 

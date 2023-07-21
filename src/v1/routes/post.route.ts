@@ -10,14 +10,16 @@ async function postRoutes(server: FastifyInstance) {
         body: $ref('createPostSchema'),
         response: {
           201: $ref('createPostSchema')
-        }
+        },
+        tags:["Post"]
       }
     }, createPostHandler)
     .get("/", {
       schema: {
         response: {
           200: $ref("postsResponseSchema"),
-        }
+        },
+        tags:["Post"]
       }
     }, getPostsHandler)
 }
