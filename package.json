@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/jwt": "^5.0.0",
     "@prisma/client": "^5.0.0",
     "config": "^3.3.9",
     "dotenv": "^16.3.1",
@@ -23,6 +24,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/fastify-jwt": "^0.8.1",
     "@types/node": "^20.4.2",
     "typescript": "^5.1.6"
   }

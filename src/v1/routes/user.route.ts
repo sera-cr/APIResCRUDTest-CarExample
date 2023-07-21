@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { registerUserHandler } from "../../controllers/user.controller.js";
+import { loginHandler, registerUserHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 const opts: RouteShorthandOptions = {
@@ -27,7 +27,16 @@ async function userRoutes(server: FastifyInstance) {
           201: $ref("createUserResponseSchema"),
         }
       }
-    }, registerUserHandler);
+    }, registerUserHandler)
+    // login user
+    .post("/login", {
+      schema: {
+        body: $ref('loginSchema'),
+        response: {
+          200: $ref('loginResponseSchema')
+        }
+      }
+    }, loginHandler)
 }
 
 export default userRoutes;

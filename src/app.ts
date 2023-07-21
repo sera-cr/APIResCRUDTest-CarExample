@@ -1,50 +1,26 @@
-/*
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
-import { Server, IncomingMessage, ServerResponse } from 'http'
-
-const server: FastifyInstance = Fastify({})
-
-const opts: RouteShorthandOptions = {
-  schema: {
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          pong: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
-}
-
-server.get('/ping', opts, async (request, reply) => {
-  return { pong: 'it worked!' }
-})
-
-const start = async () => {
-  try {
-    await server.listen({ port: 3000 })
-
-    const address = server.server.address()
-    const port = typeof address === 'string' ? address : address?.port
-
-  } catch (err) {
-    server.log.error(err)
-    process.exit(1)
-  }
-}
-
-start()
-*/
-import Fastify, { FastifyInstance, RouteShorthandOptions } from "fastify";
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from "fastify";
+// common js import
+import pkg from "@fastify/jwt";
+const { fastifyJwt } = pkg;
 import { listenOptions } from "../config/listenOptions.config.js";
 import userRoutes from "./v1/routes/user.route.js";
 import { userSchemas } from "./schemas/user.schema.js";
+import { jwtConfig } from "../config/jwt.config.js";
 
 
-const server: FastifyInstance = Fastify({});
+export const server: FastifyInstance = Fastify({});
+
+server.register(fastifyJwt, {
+  secret: jwtConfig.secret
+});
+
+server.decorate("authenticate", async(request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    await request.jwtVerify();
+  } catch(err) {
+    return reply.send(err);
+  }
+})
 
 let port: number;
 let host: string;
