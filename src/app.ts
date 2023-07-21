@@ -8,7 +8,8 @@ import postRoutes from "./v1/routes/post.route.js";
 import { userSchemas } from "./schemas/user.schema.js";
 import { postSchemas } from "./schemas/post.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
-import swagger from "@fastify/swagger";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui"
 import { withRefResolver } from "fastify-zod";
 
 
@@ -61,36 +62,34 @@ switch(listenOptions.status) {
     process.exit(1);
 }
 
+const swaggerOptions = {
+  swagger: {
+    info: {
+      title: "Fastify Posts API",
+      description: "Api about the interaction between users and posts",
+      version: "1.0.0",
+    },
+    host: host,
+    schemes: ["http", "https"],
+    consumes: ["application/json"],
+    produces: ["application/json"],
+    tags: [{ name: "Default", description: "Default" }],
+  },
+};
+
+const swaggerUiOptions = {
+  routePrefix: "/docs",
+  exposeRoute: true,
+};
+
+server.register(fastifySwagger, swaggerOptions);
+server.register(fastifySwaggerUi, swaggerUiOptions);
+
 const start = async() => {
 
   for (const schema of [...postSchemas, ...userSchemas]) {
     server.addSchema(schema);
   }
-
-  server.register(
-    swagger,
-    withRefResolver({
-      swagger: {
-        info: {
-          title: 'Fastify API',
-          description: 'API for posts',
-          version: '1.0.0'
-        },
-        securityDefinitions: {
-          apiKey: {
-            type: 'apiKey',
-            name: 'apiKey',
-            in: 'header'
-          }
-        },
-        host: `${host}:${port}`,
-        schemes: ['http'],
-        consumes: ['application/json'],
-        produces: ['application/json']
-      },
-      hideUntagged: true
-    })
-  )
   
   server.register(userRoutes, {prefix: `api/${api_version}/users`})
   server.register(postRoutes, {prefix: `api/${api_version}/posts`})
@@ -99,6 +98,7 @@ const start = async() => {
     await server.listen({port: port, host: host});
 
     console.log(`Server running at ${host}:${port}`);
+
   } catch(err) {
     server.log.error(err);
     process.exit(1);
