@@ -1,6 +1,6 @@
 {
-  "name": "api-crud-car-example-fastify",
-  "version": "0.0.1",
+  "name": "api-crud-posts-example-fastify",
+  "version": "1.0.0",
   "description": "Example api rest with crud operations using fastify and typescript",
   "main": "app.js",
   "type": "module",

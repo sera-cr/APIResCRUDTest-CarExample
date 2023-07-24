@@ -40,3 +40,30 @@ export async function deleteUser(email: string) {
     }
   })
 }
+
+export async function updatePassword(email:string, password: string) {
+  const {hash, salt} = hashPassword(password);
+
+  const user = await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      salt: salt,
+      password: hash
+    }
+  })
+
+  return user;
+}
+
+export async function updateName(email: string, name: string) {
+  const user = await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      name: name
+    }
+  })
+}

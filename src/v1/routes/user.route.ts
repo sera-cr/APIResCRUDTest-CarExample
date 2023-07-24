@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { deleteUserHandler, getUsersHandler, loginHandler, registerUserHandler } from "../../controllers/user.controller.js";
+import { deleteUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 async function userRoutes(server: FastifyInstance) {
@@ -42,6 +42,20 @@ async function userRoutes(server: FastifyInstance) {
         tags: ["User"]
       }
     }, deleteUserHandler)
+    // update name user
+    .put("/edit/:email", {
+      preHandler: [server.authenticate],
+      schema: {
+        body: $ref('updateSchema'),
+        querystring: {
+          email: { type: 'string' }
+        },
+        response: {
+          200: $ref('updateResponseSchema')
+        },
+        tags: ["User"]
+      }
+    }, updateUserHandler)
 }
 
 export default userRoutes;

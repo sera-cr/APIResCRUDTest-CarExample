@@ -4,7 +4,7 @@ import {buildJsonSchemas} from "fastify-zod";
 const userCore = {
   email: z.string({
     required_error: "Email is required",
-    invalid_type_error: "email must be a string",
+    invalid_type_error: "Email must be a string",
   }).email(),
   name: z.string()
 };
@@ -25,7 +25,7 @@ const createUserResponseSchema = z.object({
 const loginSchema = z.object({
   email: z.string({
     required_error: "Email is required",
-    invalid_type_error: "email must be a string",
+    invalid_type_error: "Email must be a string",
   }).email(),
   password: z.string(),
 })
@@ -37,7 +37,7 @@ const loginResponseSchema = z.object({
 const deleteSchema = z.object({
   email: z.string({
     required_error: "Email is required",
-    invalid_type_error: "email must be a string",
+    invalid_type_error: "Email must be a string",
   }).email()
 })
 
@@ -46,9 +46,26 @@ const deleteResponseSchema = z.object({
   ...userCore,
 })
 
+const updateParams = z.object({
+  email: z.string()
+})
+
+const updateSchema = z.object({
+  name: z.string().optional(),
+  password: z.string({
+    invalid_type_error: "Password must be a string",
+  }).optional(),
+})
+
+const updateResponseSchema = z.object({
+  message: z.string()
+})
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type DeleteInput = z.infer<typeof deleteSchema>;
+export type UpdateInput = z.infer<typeof updateSchema>;
+export type UpdateParams = z.infer<typeof updateParams>;
 
 export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   createUserSchema,
@@ -56,6 +73,9 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   loginSchema,
   loginResponseSchema,
   deleteSchema,
-  deleteResponseSchema
+  deleteResponseSchema,
+  updateSchema,
+  updateResponseSchema,
+  updateParams,
 },
 { $id: "UserSchema" })

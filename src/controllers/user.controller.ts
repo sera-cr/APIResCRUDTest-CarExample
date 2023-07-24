@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, DeleteInput, LoginInput } from "../schemas/user.schema.js";
-import { createUser, deleteUser, findUserByEmail, findUsers } from "../services/user.service.js";
+import { CreateUserInput, DeleteInput, LoginInput, UpdateInput, UpdateParams } from "../schemas/user.schema.js";
+import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
 
@@ -87,6 +87,45 @@ export async function deleteUserHandler(
     const deleted = await deleteUser(user.email);
 
     return reply.code(200).send(deleted);
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function updateUserHandler(
+  request: FastifyRequest<{
+    Params: UpdateParams
+    Body: UpdateInput
+  }>,
+  reply: FastifyReply
+) {
+  const body = request.body;
+  const { email } = request.params;
+  console.log(request.params);
+
+  // find user by email
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    return reply.code(401).send({
+      message: "Invalid email"
+    });
+  }
+
+  try {
+    if (body.name && body.name != '') {
+      updateName(email, body.name);
+    }
+
+    if (body.password && body.password != '') {
+      updatePassword(email, body.password);
+    }
+
+    return reply.code(200).send({
+      message: "Success"
+    })
   } catch(err) {
     console.error(err);
 
