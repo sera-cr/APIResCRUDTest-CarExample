@@ -98,9 +98,15 @@ export async function deleteUserHandler(
 
   // deleting user
   try {
-    const deleted = await deleteUser(user.email);
+    if (request.user.email === body.email || request.user.role === Role.Admin) {
+      const deleted = await deleteUser(user.email);
 
-    return reply.code(200).send(deleted);
+      return reply.code(200).send(deleted);
+    } else {
+      return reply.code(401).send({
+        message: "Unauthorized"
+      })
+    }
   } catch(err) {
     console.error(err);
 
@@ -128,17 +134,24 @@ export async function updateUserHandler(
   }
 
   try {
-    if (body.name && body.name != '') {
-      updateName(email, body.name);
+    if (request.user.email === email || request.user.role === Role.Admin) {
+      if (body.name && body.name != '') {
+        updateName(email, body.name);
+      }
+  
+      if (body.password && body.password != '') {
+        updatePassword(email, body.password);
+      }
+  
+      return reply.code(200).send({
+        message: "Success"
+      })
+    } else {
+      return reply.code(401).send({
+        message: "Unauthorized"
+      })
     }
-
-    if (body.password && body.password != '') {
-      updatePassword(email, body.password);
-    }
-
-    return reply.code(200).send({
-      message: "Success"
-    })
+    
   } catch(err) {
     console.error(err);
 
@@ -164,11 +177,17 @@ export async function updateUserRoleHandler(
   }
 
   try {
-    updateRole(email, role === "User" ? Role.User : Role.Admin)
+    if (request.user.role === Role.Admin) {
+      updateRole(email, role === "User" ? Role.User : Role.Admin)
 
-    return reply.code(200).send({
-      message: "Success"
-    })
+      return reply.code(200).send({
+        message: "Success"
+      })
+    } else {
+      return reply.code(401).send({
+        message: "Unauthorized"
+      })
+    }
   } catch(err) {
     console.error(err);
 

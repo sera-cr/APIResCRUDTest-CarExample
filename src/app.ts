@@ -10,6 +10,7 @@ import { postSchemas } from "./schemas/post.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import { Role } from "@prisma/client";
 
 
 export const server: FastifyInstance = Fastify({});
@@ -26,6 +27,7 @@ declare module '@fastify/jwt' {
       id: number;
       email: string;
       name: string;
+      role: Role;
     }
   }
 }
