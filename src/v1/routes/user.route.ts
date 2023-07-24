@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { deleteUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler } from "../../controllers/user.controller.js";
+import { deleteUserHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 async function userRoutes(server: FastifyInstance) {
@@ -31,6 +31,15 @@ async function userRoutes(server: FastifyInstance) {
         tags:["User"]
       }
     }, getUsersHandler)
+    .get("/:email", {
+      preHandler: [server.authenticate],
+      schema: {
+        response: {
+          200: $ref('userResponseSchema')
+        },
+        tags:["User"]
+      }
+    }, getUserHandler)
     // delete user
     .delete("/", {
       preHandler: [server.authenticate],
@@ -42,7 +51,7 @@ async function userRoutes(server: FastifyInstance) {
         tags: ["User"]
       }
     }, deleteUserHandler)
-    // update name user
+    // update name/password user
     .put("/edit/:email", {
       preHandler: [server.authenticate],
       schema: {

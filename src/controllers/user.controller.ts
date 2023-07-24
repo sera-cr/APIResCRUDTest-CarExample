@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, DeleteInput, LoginInput, UpdateInput, UpdateParams } from "../schemas/user.schema.js";
+import { CreateUserInput, DeleteInput, EmailParams, LoginInput, UpdateInput } from "../schemas/user.schema.js";
 import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
@@ -65,6 +65,19 @@ export async function getUsersHandler() {
   return users;
 }
 
+export async function getUserHandler(
+  request: FastifyRequest<{
+    Params: EmailParams
+  }>,
+  reply: FastifyReply
+) {
+  const { email } = request.params;
+
+  const user = await findUserByEmail(email);
+
+  return reply.code(200).send(user);
+}
+
 export async function deleteUserHandler(
   request: FastifyRequest<{
     Body: DeleteInput
@@ -96,7 +109,7 @@ export async function deleteUserHandler(
 
 export async function updateUserHandler(
   request: FastifyRequest<{
-    Params: UpdateParams
+    Params: EmailParams
     Body: UpdateInput
   }>,
   reply: FastifyReply
