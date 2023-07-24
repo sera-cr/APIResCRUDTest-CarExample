@@ -43,11 +43,11 @@ const deleteSchema = z.object({
 
 const deleteResponseSchema = z.object({
   id: z.number(),
-  ...userCore,
+  ...userCore
 })
 
 const emailParams = z.object({
-  email: z.string()
+  email: z.string().email()
 })
 
 const updateSchema = z.object({
@@ -64,6 +64,12 @@ const updateResponseSchema = z.object({
 const userResponseSchema = z.object({
   id: z.number(),
   ...userCore,
+  role: z.string()
+})
+
+const roleParams = z.object({
+  email: z.string().email(),
+  role: z.string()
 })
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
@@ -71,6 +77,7 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type DeleteInput = z.infer<typeof deleteSchema>;
 export type UpdateInput = z.infer<typeof updateSchema>;
 export type EmailParams = z.infer<typeof emailParams>;
+export type RoleParams = z.infer<typeof roleParams>;
 
 export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   createUserSchema,
@@ -82,6 +89,7 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   updateSchema,
   updateResponseSchema,
   emailParams,
-  userResponseSchema
+  userResponseSchema,
+  roleParams
 },
 { $id: "UserSchema" })

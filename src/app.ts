@@ -9,8 +9,7 @@ import { userSchemas } from "./schemas/user.schema.js";
 import { postSchemas } from "./schemas/post.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
 import fastifySwagger from "@fastify/swagger";
-import fastifySwaggerUi from "@fastify/swagger-ui"
-import { withRefResolver } from "fastify-zod";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 
 
 export const server: FastifyInstance = Fastify({});

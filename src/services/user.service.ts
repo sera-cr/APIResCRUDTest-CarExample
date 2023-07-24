@@ -1,6 +1,7 @@
 import { CreateUserInput } from "../schemas/user.schema.js";
 import prisma from "../utils/prisma.js";
 import { hashPassword } from "../utils/hash.js";
+import { Role } from "@prisma/client";
 
 export async function createUser(input: CreateUserInput) {
 
@@ -28,7 +29,8 @@ export async function findUsers() {
     select: {
       id: true,
       email: true,
-      name: true
+      name: true,
+      role: true
     }
   });
 }
@@ -66,4 +68,19 @@ export async function updateName(email: string, name: string) {
       name: name
     }
   })
+
+  return user;
+}
+
+export async function updateRole(email: string, role: Role) {
+  const user = await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      role: role
+    }
+  });
+
+  return user;
 }

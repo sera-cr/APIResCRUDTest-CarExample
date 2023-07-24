@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, DeleteInput, EmailParams, LoginInput, UpdateInput } from "../schemas/user.schema.js";
-import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword } from "../services/user.service.js";
+import { CreateUserInput, DeleteInput, EmailParams, LoginInput, RoleParams, UpdateInput } from "../schemas/user.schema.js";
+import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword, updateRole } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
+import { Role } from "@prisma/client";
 
 export async function registerUserHandler(
   request: FastifyRequest<{
@@ -116,7 +117,6 @@ export async function updateUserHandler(
 ) {
   const body = request.body;
   const { email } = request.params;
-  console.log(request.params);
 
   // find user by email
   const user = await findUserByEmail(email);
@@ -135,6 +135,36 @@ export async function updateUserHandler(
     if (body.password && body.password != '') {
       updatePassword(email, body.password);
     }
+
+    return reply.code(200).send({
+      message: "Success"
+    })
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function updateUserRoleHandler(
+  request: FastifyRequest<{
+    Params: RoleParams
+  }>,
+  reply: FastifyReply
+) {
+  const { email, role } = request.params;
+
+  // find user by email
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    return reply.code(401).send({
+      message: "Invalid email"
+    });
+  }
+
+  try {
+    updateRole(email, role === "User" ? Role.User : Role.Admin)
 
     return reply.code(200).send({
       message: "Success"
