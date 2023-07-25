@@ -4,6 +4,7 @@ import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updateP
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
 import { Role } from "@prisma/client";
+import { getPostsByUser } from "../services/post.service.js";
 
 export async function registerUserHandler(
   request: FastifyRequest<{
@@ -188,6 +189,36 @@ export async function updateUserRoleHandler(
         message: "Unauthorized"
       })
     }
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function getPostsUserHandler(
+  request: FastifyRequest<{
+    Params: EmailParams
+  }>,
+  reply: FastifyReply
+) {
+  const { email } = request.params;
+
+  // find user by email
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    return reply.code(401).send({
+      message: "Invalid email"
+    })
+  }
+
+  try {
+    const posts = await getPostsByUser(user.id);
+
+    return reply.code(200).send({
+      posts: posts
+    });
   } catch(err) {
     console.error(err);
 

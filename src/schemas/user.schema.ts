@@ -72,12 +72,26 @@ const roleParams = z.object({
   role: z.string()
 })
 
+const postUser = z.object({
+  title: z.string(),
+  content: z.string().optional(),
+  published: z.boolean().optional(),
+  id: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+})
+
+const postsUser = z.object({
+  posts: z.array(postUser)
+})
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type DeleteInput = z.infer<typeof deleteSchema>;
 export type UpdateInput = z.infer<typeof updateSchema>;
 export type EmailParams = z.infer<typeof emailParams>;
 export type RoleParams = z.infer<typeof roleParams>;
+export type PostsUser = z.infer<typeof postsUser>;
 
 export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   createUserSchema,
@@ -90,6 +104,8 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   updateResponseSchema,
   emailParams,
   userResponseSchema,
-  roleParams
+  roleParams,
+  postsUser,
+  postUser
 },
 { $id: "UserSchema" })

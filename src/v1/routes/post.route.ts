@@ -4,6 +4,7 @@ import { $ref } from "../../schemas/post.schema.js";
 
 async function postRoutes(server: FastifyInstance) {
   server
+    // create a new post
     .post("/", {
       preHandler: [server.authenticate],
       schema: {
@@ -14,6 +15,7 @@ async function postRoutes(server: FastifyInstance) {
         tags:["Post"]
       }
     }, createPostHandler)
+    // get the list of posts
     .get("/", {
       schema: {
         response: {
@@ -22,6 +24,11 @@ async function postRoutes(server: FastifyInstance) {
         tags:["Post"]
       }
     }, getPostsHandler)
+    // edit post
+
+    // delete post
+
+
 }
 
 export default postRoutes

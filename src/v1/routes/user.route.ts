@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { deleteUserHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
+import { deleteUserHandler, getPostsUserHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 async function userRoutes(server: FastifyInstance) {
@@ -79,6 +79,19 @@ async function userRoutes(server: FastifyInstance) {
         tags: ["User"]
       }
     }, updateUserRoleHandler)
+    // posts by username
+    .get("/:email/posts", {
+      preHandler: [server.authenticate],
+      schema: {
+        querystring: {
+          email: { type: 'string' },
+        },
+        response: {
+          200: $ref('postsUser')
+        },
+        tags: ["User"]
+      }
+    }, getPostsUserHandler)
 }
 
 export default userRoutes;
