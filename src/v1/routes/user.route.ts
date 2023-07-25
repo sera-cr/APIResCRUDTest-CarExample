@@ -52,7 +52,7 @@ async function userRoutes(server: FastifyInstance) {
       }
     }, deleteUserHandler)
     // update name/password user
-    .put("/edit/:email", {
+    .put("/:email", {
       preHandler: [server.authenticate],
       schema: {
         body: $ref('updateSchema'),
@@ -66,7 +66,7 @@ async function userRoutes(server: FastifyInstance) {
       }
     }, updateUserHandler)
     // update role user
-    .put("/edit/:email/role/:role", {
+    .put("/:email/role/:role", {
       preHandler: [server.authenticate],
       schema: {
         querystring: {
