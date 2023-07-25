@@ -7,6 +7,16 @@ const postInput = {
   published: z.boolean().optional()
 };
 
+const postResponse = {
+  id: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  title: z.string(),
+  content: z.string(),
+  published: z.boolean(),
+  authorId: z.number()
+}
+
 const postGenerated = {
   id: z.number(),
   createdAt: z.string(),
@@ -36,13 +46,11 @@ const editPostSchema = z.object({
 })
 
 const editPostResponseSchema = z.object({
-  id: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  title: z.string(),
-  content: z.string(),
-  published: z.boolean(),
-  authorId: z.number()
+  ...postResponse
+})
+
+const getPostResponseSchema = z.object({
+  ...postResponse
 })
 
 export type CreatePostInput = z.infer<typeof createPostSchema>;

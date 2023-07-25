@@ -67,3 +67,31 @@ export async function updatePostHandler(
     return reply.code(500);
   }
 }
+
+export async function getPostHandler(
+  request: FastifyRequest<{
+    Params: IdParams
+  }>,
+  reply: FastifyReply
+) {
+  const id: number = parseInt(request.params.id);
+  const body = request.body;
+
+  try {
+    // find post by id
+    const post = await getPostById(id);
+
+    if (!post) {
+      return reply.code(401).send({
+        message: "Invalid post id"
+      });
+    }
+
+    return reply.code(200).send(post);
+
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
