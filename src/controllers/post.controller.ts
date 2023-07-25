@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreatePostInput, EditPostSchema, IdParams } from "../schemas/post.schema.js";
-import { createPost, getPostById, getPosts, updateContent, updatePublished, updateTitle } from "../services/post.service.js";
+import { createPost, deletePost, getPostById, getPosts, updateContent, updatePublished, updateTitle } from "../services/post.service.js";
 import { Role } from "@prisma/client";
 
 export async function createPostHandler(
@@ -75,7 +75,6 @@ export async function getPostHandler(
   reply: FastifyReply
 ) {
   const id: number = parseInt(request.params.id);
-  const body = request.body;
 
   try {
     // find post by id
@@ -89,6 +88,34 @@ export async function getPostHandler(
 
     return reply.code(200).send(post);
 
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function deletePostHandler(
+  request: FastifyRequest<{
+    Params: IdParams
+  }>,
+  reply: FastifyReply
+) {
+  const id: number = parseInt(request.params.id);
+
+  // find post by id
+  const post = await getPostById(id);
+
+  if (!post) {
+    return reply.code(401).send({
+      message: "Invalid post id"
+    });
+  }
+
+  try {
+    const post = await deletePost(id);
+
+    return reply.code(200).send(post);
   } catch(err) {
     console.error(err);
 

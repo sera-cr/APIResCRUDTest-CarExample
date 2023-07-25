@@ -56,6 +56,7 @@ const getPostResponseSchema = z.object({
 export type CreatePostInput = z.infer<typeof createPostSchema>;
 export type IdParams = z.infer<typeof idParams>;
 export type EditPostSchema = z.infer<typeof editPostSchema>;
+export type GetPostResponseSchema = z.infer<typeof getPostResponseSchema>;
 
 export const { schemas: postSchemas, $ref } = buildJsonSchemas({
   createPostSchema,
@@ -63,6 +64,7 @@ export const { schemas: postSchemas, $ref } = buildJsonSchemas({
   postsResponseSchema,
   idParams,
   editPostSchema,
-  editPostResponseSchema
+  editPostResponseSchema,
+  getPostResponseSchema
 },
 { $id: "PostSchema" });

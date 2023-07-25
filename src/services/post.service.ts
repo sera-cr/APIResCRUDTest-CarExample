@@ -101,3 +101,13 @@ export async function updatePublished(postId: number, published: boolean) {
 
   return post
 }
+
+ export async function deletePost(postId: number) {
+  const post = await prisma.post.delete({
+    where: {
+      id: postId
+    }
+  })
+
+  return post
+ }
