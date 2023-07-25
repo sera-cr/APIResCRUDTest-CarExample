@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
-import { createPostHandler, getPostsHandler } from "../../controllers/post.controller.js";
+import { createPostHandler, getPostsHandler, updatePostHandler } from "../../controllers/post.controller.js";
 import { $ref } from "../../schemas/post.schema.js";
+import { number } from "zod";
 
 async function postRoutes(server: FastifyInstance) {
   server
@@ -24,8 +25,22 @@ async function postRoutes(server: FastifyInstance) {
         tags:["Post"]
       }
     }, getPostsHandler)
+    // get post by id
+    
     // edit post
-
+    .put("/:id", {
+      preHandler: [server.authenticate],
+      schema: {
+        body: $ref('editPostSchema'),
+        querystring: {
+          id: { type: 'string' }
+        },
+        response: {
+          200: $ref('editPostResponseSchema')
+        },
+        tags: ["Post"]
+      }
+    }, updatePostHandler)
     // delete post
 
 

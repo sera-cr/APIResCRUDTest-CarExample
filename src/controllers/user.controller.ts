@@ -136,11 +136,11 @@ export async function updateUserHandler(
 
   try {
     if (request.user.email === email || request.user.role === Role.Admin) {
-      if (body.name && body.name != '') {
+      if (body.name) {
         updateName(email, body.name);
       }
   
-      if (body.password && body.password != '') {
+      if (body.password) {
         updatePassword(email, body.password);
       }
   

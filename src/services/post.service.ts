@@ -2,13 +2,13 @@ import prisma from "../utils/prisma.js";
 import { CreatePostInput } from "src/schemas/post.schema.js";
 
 export async function createPost(data: CreatePostInput & {authorId: number}) {
-  return prisma.post.create({
+  return await prisma.post.create({
     data
   })
 }
 
-export function getPosts() {
-  return prisma.post.findMany({
+export async function getPosts() {
+  return await prisma.post.findMany({
     select: {
       content: true,
       title: true,
@@ -16,12 +16,10 @@ export function getPosts() {
       id: true,
       createdAt: true,
       updatedAt: true,
-      author: {
-        select: {
-          name: true,
-          id: true,
-        }
-      }
+      authorId: true
+    },
+    where: {
+      published: true
     }
   })
 }
@@ -34,12 +32,72 @@ export async function getPostsByUser(userId: number) {
       published: true,
       title: true,
       updatedAt: true,
-      createdAt: true
+      createdAt: true,
+      authorId: true
     },
     where: {
-      authorId: userId
+      authorId: userId,
+      published: true
     }
   })
 
   return posts
+}
+
+export async function getPostById(postId: number) {
+  const post = await prisma.post.findUnique({
+    select: {
+      id: true,
+      content: true,
+      published: true,
+      title: true,
+      updatedAt: true,
+      createdAt: true,
+      authorId: true
+    },
+    where: {
+      id: postId
+    }
+  })
+
+  return post
+}
+
+export async function updateTitle(postId: number, title: string) {
+  const post = await prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      title: title
+    }
+  })
+
+  return post
+}
+
+export async function updateContent(postId: number, content: string) {
+  const post = await prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      content: content
+    }
+  })
+
+  return post
+}
+
+export async function updatePublished(postId: number, published: boolean) {
+  const post = await prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      published: published
+    }
+  })
+
+  return post
 }
