@@ -1,7 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { createPostHandler, deletePostHandler, getPostHandler, getPostsHandler, updatePostHandler } from "../../controllers/post.controller.js";
 import { $ref } from "../../schemas/post.schema.js";
-import { number } from "zod";
 
 async function postRoutes(server: FastifyInstance) {
   server
