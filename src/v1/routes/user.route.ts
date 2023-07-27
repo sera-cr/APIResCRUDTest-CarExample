@@ -11,7 +11,8 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           201: $ref("createUserResponseSchema"),
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Create an user. Input: email, name, password. Output: id, email, name"
       }
     }, registerUserHandler)
     // login user
@@ -21,14 +22,16 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('loginResponseSchema')
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Login for users. It generates an access token. Input: email, password. Output: accessToken."
       }
     }, loginHandler)
     // list of users
     .get("/", {
       preHandler: [server.authenticate],
       schema: {
-        tags:["User"]
+        tags:["User"],
+        description: "It returns the list of users. Output: List of users."
       }
     }, getUsersHandler)
     .get("/:email", {
@@ -37,7 +40,8 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('userResponseSchema')
         },
-        tags:["User"]
+        tags:["User"],
+        description: "Returns an user by it's email. Params: email. Output: id, email, name, role"
       }
     }, getUserHandler)
     // delete user
@@ -48,7 +52,8 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('deleteResponseSchema')
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Deletes an user. Input: email. Output: id, name, email."
       }
     }, deleteUserHandler)
     // update name/password user
@@ -62,7 +67,8 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('updateResponseSchema')
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Update an user. Params: email. Input: name, password. Both optional. Output: message."
       }
     }, updateUserHandler)
     // update role user
@@ -76,10 +82,11 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('updateResponseSchema')
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Modifies the role of an user. Params: email, role. Output: message."
       }
     }, updateUserRoleHandler)
-    // posts by username
+    // get posts by user
     .get("/:email/posts", {
       preHandler: [server.authenticate],
       schema: {
@@ -89,7 +96,8 @@ async function userRoutes(server: FastifyInstance) {
         response: {
           200: $ref('postsUser')
         },
-        tags: ["User"]
+        tags: ["User"],
+        description: "Get all the posts by an user. Params: email. Output: list of Posts(title, content, published, id, createdAt, updatedAt)"
       }
     }, getPostsUserHandler)
 }

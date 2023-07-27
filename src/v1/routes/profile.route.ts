@@ -15,7 +15,8 @@ async function profileRoutes(server: FastifyInstance) {
       response: {
         200: $ref('profileResponseSchema')
       },
-      tags:["Profile"]
+      tags:["Profile"],
+      description: "Get a profile by user id. Params: User id. Output: bio, id, userId."
     }
   }, getProfileHandler)
   // create a profile
@@ -29,7 +30,8 @@ async function profileRoutes(server: FastifyInstance) {
       response: {
         200: $ref('profileResponseSchema')
       },
-      tags: ["Profile"]
+      tags: ["Profile"],
+      description: "Create a profile. Params: userId. Input: bio. Output: bio, id, userId."
     }
   }, createProfileHandler)
   // edit a profile
@@ -43,7 +45,8 @@ async function profileRoutes(server: FastifyInstance) {
       response: {
         200: $ref('profileResponseSchema')
       },
-      tags: ["Profile"]
+      tags: ["Profile"],
+      description: "Edit a profile. Params: userId. Input: bio, id, userId."
     }
   }, editProfileHandler)
   // delete a profile
@@ -56,7 +59,8 @@ async function profileRoutes(server: FastifyInstance) {
       response: {
         200: $ref('profileResponseSchema')
       },
-      tags: ["Profile"]
+      tags: ["Profile"],
+      description: "Delete a profile. Params: userId. Input: bio, id, userId."
     }
   }, deleteProfileHandler)
 }

@@ -12,7 +12,8 @@ async function postRoutes(server: FastifyInstance) {
         response: {
           201: $ref('createPostSchema')
         },
-        tags:["Post"]
+        tags:["Post"],
+        description: "Creates a post. Input: title, content and published. Output: title, content and published."
       }
     }, createPostHandler)
     // get the list of posts
@@ -21,7 +22,8 @@ async function postRoutes(server: FastifyInstance) {
         response: {
           200: $ref("postsResponseSchema"),
         },
-        tags:["Post"]
+        tags:["Post"],
+        description: "Get the full list of posts that are published. Output: List of Posts (title, content, published, id, createdAt, updatedAt, authorId)."
       }
     }, getPostsHandler)
     // get post by id
@@ -31,7 +33,8 @@ async function postRoutes(server: FastifyInstance) {
         response: {
           200: $ref("postResponseSchema")
         },
-        tags: ["Post"]
+        tags: ["Post"],
+        description: "Get a post. Params: Id of the post. Output: title, content, published, id, createdAt, updatedAt, authorId."
       }
     }, getPostHandler)
     // edit post
@@ -45,7 +48,9 @@ async function postRoutes(server: FastifyInstance) {
         response: {
           200: $ref('editPostResponseSchema')
         },
-        tags: ["Post"]
+        tags: ["Post"],
+        description: "Edit a post. Params: Id of the post." +
+        " Input: title, content, published. All optional. Output: title, content, published, id, createdAt, updatedAt, authorId."
       }
     }, updatePostHandler)
     // delete post
@@ -58,7 +63,8 @@ async function postRoutes(server: FastifyInstance) {
         response: {
           200: $ref('getPostResponseSchema')
         },
-        tags: ["Post"]
+        tags: ["Post"],
+        description: "Delete a post. Params: Id of the post. Output: title, content, published, id, createdAt, updatedAt, authorId."
       }
     }, deletePostHandler)
 }

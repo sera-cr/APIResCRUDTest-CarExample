@@ -77,7 +77,8 @@ const swaggerOptions = {
     consumes: ["application/json"],
     produces: ["application/json"],
     tags: [{ name: "User", description: "Endpoints CRUD about Users data." },
-           { name: "Post", description: "Endpoints CRUD about Posts data."}],
+           { name: "Post", description: "Endpoints CRUD about Posts data."},
+           { name: "Profile", description: "Endpoints CRUD about Profile data."}],
   },
 };
 
