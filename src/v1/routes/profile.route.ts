@@ -3,7 +3,7 @@ import { createProfileHandler, deleteProfileHandler, editProfileHandler, getProf
 import { $ref } from "../../schemas/profile.schema.js";
 
 
-async function getProfile(server: FastifyInstance) {
+async function profileRoutes(server: FastifyInstance) {
   server
   // get a profile
   .get("/:userId", {
@@ -60,3 +60,5 @@ async function getProfile(server: FastifyInstance) {
     }
   }, deleteProfileHandler)
 }
+
+export default profileRoutes

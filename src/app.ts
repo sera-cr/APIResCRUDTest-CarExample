@@ -7,10 +7,12 @@ import userRoutes from "./v1/routes/user.route.js";
 import postRoutes from "./v1/routes/post.route.js";
 import { userSchemas } from "./schemas/user.schema.js";
 import { postSchemas } from "./schemas/post.schema.js";
+import { profileSchemas } from "./schemas/profile.schema.js";
 import { jwtConfig } from "../config/jwt.config.js";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { Role } from "@prisma/client";
+import profileRoutes from "./v1/routes/profile.route.js";
 
 
 export const server: FastifyInstance = Fastify({});
@@ -89,12 +91,13 @@ server.register(fastifySwaggerUi, swaggerUiOptions);
 
 const start = async() => {
 
-  for (const schema of [...postSchemas, ...userSchemas]) {
+  for (const schema of [...postSchemas, ...userSchemas, ...profileSchemas]) {
     server.addSchema(schema);
   }
   
   server.register(userRoutes, {prefix: `api/${api_version}/users`})
   server.register(postRoutes, {prefix: `api/${api_version}/posts`})
+  server.register(profileRoutes, {prefix: `api/${api_version}/profiles`})
 
   try {
     await server.listen({port: port, host: host});

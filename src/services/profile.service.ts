@@ -1,4 +1,3 @@
-import { table } from "console";
 import prisma from "../utils/prisma.js";
 
 export async function getProfileUserId(userId: number) {

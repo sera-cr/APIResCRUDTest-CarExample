@@ -2,18 +2,17 @@ import { z } from "zod";
 import { buildJsonSchemas } from "fastify-zod";
 
 const idParams = z.object({
-  id: z.string()
+  userId: z.string()
 })
 
 const profileResponseSchema = z.object({
-  bio: z.string(),
+  bio: z.string().optional(),
   id: z.number(),
   userId: z.number()
 })
 
 const createProfileSchema = z.object({
   bio: z.string(),
-  userId: z.number()
 })
 
 const editProfileSchema = z.object({

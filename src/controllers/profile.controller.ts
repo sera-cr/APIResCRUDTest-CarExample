@@ -9,7 +9,7 @@ export async function getProfileHandler(
   }>,
   reply: FastifyReply
 ) {
-  const userId: number = parseInt(request.params.id);
+  const userId: number = parseInt(request.params.userId);
 
   // get profile by user id
   const profile = await getProfileUserId(userId);
@@ -31,15 +31,17 @@ export async function getProfileHandler(
 
 export async function createProfileHandler(
   request: FastifyRequest<{
+    Params: IdParams
     Body: CreateProfileInput
   }>,
   reply: FastifyReply
 ) {
   const body = request.body;
+  const userId = parseInt(request.params.userId);
 
   try {
-    if (request.user.id === body.userId || request.user.role === Role.Admin) {
-      const profile = await createProfile(body.bio, body.userId);
+    if (request.user.id === userId || request.user.role === Role.Admin) {
+      const profile = await createProfile(body.bio, userId);
 
       return reply.code(200).send(profile);
     }
@@ -57,7 +59,7 @@ export async function editProfileHandler(
   }>,
   reply: FastifyReply
 ) {
-  const userId = parseInt(request.params.id);
+  const userId = parseInt(request.params.userId);
   const body = request.body;
 
   // get profile by user id
@@ -86,7 +88,7 @@ export async function deleteProfileHandler(
   }>,
   reply: FastifyReply
 ) {
-  const userId = parseInt(request.params.id);
+  const userId = parseInt(request.params.userId);
 
   // get profile by user id
   const profile = await getProfileUserId(userId);
