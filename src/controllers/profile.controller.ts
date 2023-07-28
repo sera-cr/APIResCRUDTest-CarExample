@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreateProfileInput, EditProfileInput, IdParams } from "../schemas/profile.schema.js";
 import { createProfile, deleteProfile, getProfileUserId, updateProfile } from "../services/profile.service.js";
-import { Role } from "@prisma/client";
+import pkg from "@prisma/client";
+const { Role } = pkg;
 
 export async function getProfileHandler(
   request: FastifyRequest<{

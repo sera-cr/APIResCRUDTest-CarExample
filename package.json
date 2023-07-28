@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
-    "start": "tsc -w & nodemon ./build/src/app.js"
+    "start": "tsc -w & nodemon ./build/src/app.js",
+    "build:prod": "rimraf ./build && tsc",
+    "start:prod": "STATUS=production && npm run build:prod && node ./build/src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.2",
+    "rimraf": "^5.0.1",
     "typescript": "^5.1.6"
   }
 }

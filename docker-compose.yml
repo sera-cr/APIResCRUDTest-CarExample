@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  api: 
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: post-that_api-docker
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    network_mode: "host"
+    command: npm run start:prod

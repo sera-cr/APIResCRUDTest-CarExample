@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreatePostInput, EditPostSchema, IdParams } from "../schemas/post.schema.js";
 import { createPost, deletePost, getPostById, getPosts, updateContent, updatePublished, updateTitle } from "../services/post.service.js";
-import { Role } from "@prisma/client";
+import pkg from "@prisma/client";
+const { Role } = pkg;
 
 export async function createPostHandler(
   request: FastifyRequest<{

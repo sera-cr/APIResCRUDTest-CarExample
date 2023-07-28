@@ -3,7 +3,8 @@ import { CreateUserInput, DeleteInput, EmailParams, LoginInput, RoleParams, Upda
 import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword, updateRole } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
-import { Role } from "@prisma/client";
+import pkg from "@prisma/client";
+const { Role } = pkg;
 import { getPostsByUser } from "../services/post.service.js";
 
 export async function registerUserHandler(
