@@ -66,7 +66,8 @@ export async function loginHandler(
       id: user.id,
       email: user.email,
       name: user.name,
-      accessToken: accessToken
+      accessToken: accessToken,
+      role: user.role
     }
   }
   

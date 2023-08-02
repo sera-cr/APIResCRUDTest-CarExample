@@ -32,7 +32,8 @@ const loginSchema = z.object({
 
 const loginResponseSchema = z.object({
   id: z.number(),
-  ...userCore, 
+  ...userCore,
+  role: z.string(),
   accessToken: z.string(),
 })
 
