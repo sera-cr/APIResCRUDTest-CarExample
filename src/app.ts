@@ -13,6 +13,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { Role } from "@prisma/client";
 import profileRoutes from "./v1/routes/profile.route.js";
+import cors from "@fastify/cors";
 
 
 export const server: FastifyInstance = Fastify({});
@@ -89,6 +90,8 @@ const swaggerUiOptions = {
 
 server.register(fastifySwagger, swaggerOptions);
 server.register(fastifySwaggerUi, swaggerUiOptions);
+
+server.register(cors, {});
 
 const start = async() => {
 

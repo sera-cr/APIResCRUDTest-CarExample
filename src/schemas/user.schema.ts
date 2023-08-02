@@ -85,6 +85,10 @@ const postsUser = z.object({
   posts: z.array(postUser)
 })
 
+const emailExistsResponseSchema = z.object({
+  message: z.string()
+})
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type DeleteInput = z.infer<typeof deleteSchema>;
@@ -106,6 +110,7 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   userResponseSchema,
   roleParams,
   postsUser,
-  postUser
+  postUser,
+  emailExistsResponseSchema
 },
 { $id: "UserSchema" })

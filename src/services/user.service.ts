@@ -2,6 +2,7 @@ import { CreateUserInput } from "../schemas/user.schema.js";
 import prisma from "../utils/prisma.js";
 import { hashPassword } from "../utils/hash.js";
 import { Role } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
 
 export async function createUser(input: CreateUserInput) {
 
@@ -9,11 +10,20 @@ export async function createUser(input: CreateUserInput) {
 
   const {hash, salt} = hashPassword(password);
 
-  const user = await prisma.user.create({
-    data: {...rest, salt, password: hash},
-  })
-
-  return user;
+  try {
+    const user = await prisma.user.create({
+      data: {...rest, salt, password: hash},
+    })
+  
+    return user;
+  } catch(err) {
+    if (err instanceof PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        console.log("Unique constraint violation. User cannot be created.");
+        return "Unique constraint violation. User cannot be created.";
+      }
+    }
+  }
 }
 
 export async function findUserByEmail(email: string) {

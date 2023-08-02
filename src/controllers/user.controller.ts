@@ -6,6 +6,8 @@ import { server } from "../app.js";
 import pkg from "@prisma/client";
 const { Role } = pkg;
 import { getPostsByUser } from "../services/post.service.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
+import { relative } from "path";
 
 export async function registerUserHandler(
   request: FastifyRequest<{
@@ -18,9 +20,15 @@ export async function registerUserHandler(
   try {
     const user = await createUser(body);
 
-    return reply.code(201).send(user);
+    console.log(user);
+
+    if (typeof user === 'string') {
+      return reply.code(409).send({message: user});
+    } else {
+      return reply.code(200).send(user);
+    }
   } catch(err) {
-    console.error(err);
+    console.log(err);
 
     return reply.code(500);
   }

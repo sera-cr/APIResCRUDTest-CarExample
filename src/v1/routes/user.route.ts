@@ -9,7 +9,8 @@ async function userRoutes(server: FastifyInstance) {
       schema: {
         body: $ref('createUserSchema'),
         response: {
-          201: $ref("createUserResponseSchema"),
+          200: $ref("createUserResponseSchema"),
+          409: $ref("emailExistsResponseSchema")
         },
         tags: ["User"],
         description: "Create an user. Input: email, name, password. Output: id, email, name"
