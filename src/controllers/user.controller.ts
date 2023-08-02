@@ -60,8 +60,14 @@ export async function loginHandler(
 
   if (password) {
     const {password, salt, ...rest} = user
-  // generate access token
-    return { accessToken: server.jwt.sign(rest)}
+    // generate access token
+    const accessToken = server.jwt.sign(rest);
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      accessToken: accessToken
+    }
   }
   
   // error response
