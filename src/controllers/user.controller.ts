@@ -20,8 +20,6 @@ export async function registerUserHandler(
   try {
     const user = await createUser(body);
 
-    console.log(user);
-
     if (typeof user === 'string') {
       return reply.code(409).send({message: user});
     } else {
