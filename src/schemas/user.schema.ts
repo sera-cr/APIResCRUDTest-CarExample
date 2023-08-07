@@ -96,6 +96,7 @@ const postUserInfo = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   author: z.object({
+    id: z.number(),
     name: z.string(),
     email: z.string()
   }),

@@ -36,6 +36,7 @@ export async function getPostsUsers() {
       authorId: true,
       author: {
         select: {
+          id: true,
           name: true,
           email: true,
         }
