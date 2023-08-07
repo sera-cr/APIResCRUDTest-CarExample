@@ -88,8 +88,25 @@ const postUser = z.object({
   updatedAt: z.string(),
 })
 
+const postUserInfo = z.object({
+  title: z.string(),
+  content: z.string().optional(),
+  published: z.boolean().optional(),
+  id: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  author: z.object({
+    name: z.string(),
+    email: z.string()
+  }),
+})
+
 const postsUser = z.object({
   posts: z.array(postUser)
+})
+
+const allPostsUsersResponse = z.object({
+  posts: z.array(postUserInfo)
 })
 
 const emailExistsResponseSchema = z.object({
@@ -120,6 +137,7 @@ export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   postsUser,
   postUser,
   emailExistsResponseSchema,
-  idParams
+  idParams,
+  allPostsUsersResponse
 },
 { $id: "UserSchema" })

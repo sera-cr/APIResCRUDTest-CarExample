@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { deleteUserHandler, getPostsUserHandler, getUserCredentialsHandler, getUserEmailHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
+import { deleteUserHandler, getPostsUserHandler, getPostsUsersHandler, getUserCredentialsHandler, getUserEmailHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 async function userRoutes(server: FastifyInstance) {
@@ -36,19 +36,6 @@ async function userRoutes(server: FastifyInstance) {
       }
     }, getUsersHandler)
     // get user by id
-    /*.get("/:id", {
-      preHandler: [server.authenticate],
-      schema: {
-        querystring: {
-          id: {type: 'string'}
-        },
-        response: {
-          200: $ref('userResponseSchema')
-        },
-        tags: ["User"],
-        description: "Returns an user by it's id. Params: email. Output: id, email, name, role"
-      }
-    }, getUserHandler)*/
     .get("/:id", {
       preHandler: [server.authenticate],
       schema: {
@@ -119,19 +106,29 @@ async function userRoutes(server: FastifyInstance) {
       }
     }, updateUserRoleHandler)
     // get posts by user
-    .get("/:email/posts", {
+    .get("/:id/posts", {
       preHandler: [server.authenticate],
       schema: {
         querystring: {
-          email: { type: 'string' },
+          id: { type: 'string' },
         },
         response: {
           200: $ref('postsUser')
         },
         tags: ["User"],
-        description: "Get all the posts by an user. Params: email. Output: list of Posts(title, content, published, id, createdAt, updatedAt)"
+        description: "Get all the posts by an user. Params: id. Output: list of Posts(title, content, published, id, createdAt, updatedAt)"
       }
     }, getPostsUserHandler)
+    .get("/posts", {
+      preHandler: [server.authenticate],
+      schema: {
+        response: {
+          200: $ref('allPostsUsersResponse')
+        },
+        tags: ["User"],
+        description: "Get all the posts relationed with all the users. Output: list of Posts(title, content, published, id, createdAt, updatedAt, name, email)"
+      }
+    }, getPostsUsersHandler)
     // get credentials from accessToken
     .get("/credentials", {
       preHandler: [server.authenticate],

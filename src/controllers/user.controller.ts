@@ -5,7 +5,7 @@ import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
 import pkg from "@prisma/client";
 const { Role } = pkg;
-import { getPostsByUser } from "../services/post.service.js";
+import { getPostsByUser, getPostsUsers } from "../services/post.service.js";
 
 export async function registerUserHandler(
   request: FastifyRequest<{
@@ -232,14 +232,14 @@ export async function updateUserRoleHandler(
 
 export async function getPostsUserHandler(
   request: FastifyRequest<{
-    Params: EmailParams
+    Params: IdParams
   }>,
   reply: FastifyReply
 ) {
-  const { email } = request.params;
+  const id = parseInt(request.params.id);
 
-  // find user by email
-  const user = await findUserByEmail(email);
+  // find user by id
+  const user = await findUserById(id);
 
   if (!user) {
     return reply.code(401).send({
@@ -273,6 +273,23 @@ export async function getUserCredentialsHandler(
       name: user.name,
       role: user.role
     })
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function getPostsUsersHandler(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const posts = await getPostsUsers()
+
+    return reply.code(200).send({
+      posts: posts
+    });
   } catch(err) {
     console.error(err);
 

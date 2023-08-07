@@ -24,6 +24,29 @@ export async function getPosts() {
   })
 }
 
+export async function getPostsUsers() {
+  return await prisma.post.findMany({
+    select: {
+      content: true,
+      title: true,
+      published: true,
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      authorId: true,
+      author: {
+        select: {
+          name: true,
+          email: true,
+        }
+      }
+    },
+    where: {
+      published: true
+    }
+  })
+}
+
 export async function getPostsByUser(userId: number) {
   const posts = await prisma.post.findMany({
     select: {
@@ -36,8 +59,7 @@ export async function getPostsByUser(userId: number) {
       authorId: true
     },
     where: {
-      authorId: userId,
-      published: true
+      authorId: userId
     }
   })
 
