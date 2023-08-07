@@ -1,5 +1,5 @@
 import { FastifyInstance, RouteShorthandOptions } from "fastify";
-import { deleteUserHandler, getPostsUserHandler, getUserCredentialsHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
+import { deleteUserHandler, getPostsUserHandler, getUserCredentialsHandler, getUserEmailHandler, getUserHandler, getUsersHandler, loginHandler, registerUserHandler, updateUserHandler, updateUserRoleHandler } from "../../controllers/user.controller.js";
 import { $ref } from "../../schemas/user.schema.js";
 
 async function userRoutes(server: FastifyInstance) {
@@ -35,16 +35,47 @@ async function userRoutes(server: FastifyInstance) {
         description: "It returns the list of users. Output: List of users."
       }
     }, getUsersHandler)
-    .get("/:email", {
+    // get user by id
+    /*.get("/:id", {
       preHandler: [server.authenticate],
       schema: {
+        querystring: {
+          id: {type: 'string'}
+        },
+        response: {
+          200: $ref('userResponseSchema')
+        },
+        tags: ["User"],
+        description: "Returns an user by it's id. Params: email. Output: id, email, name, role"
+      }
+    }, getUserHandler)*/
+    .get("/:id", {
+      preHandler: [server.authenticate],
+      schema: {
+        querystring: {
+          id: {type: 'string'}
+        },
+        response: {
+          200: $ref('userResponseSchema')
+        },
+        tags: ["User"],
+        description: "Returns an user by it's id. Params: email. Output: id, email, name, role"
+      }
+    }, getUserHandler)
+    // get user by email
+    .get("/email/:email", {
+      preHandler: [server.authenticate],
+      schema: {
+        querystring: {
+          email: {type: 'string'}
+        },
         response: {
           200: $ref('userResponseSchema')
         },
         tags:["User"],
         description: "Returns an user by it's email. Params: email. Output: id, email, name, role"
       }
-    }, getUserHandler)
+    }, getUserEmailHandler)
     // delete user
     .delete("/", {
       preHandler: [server.authenticate],

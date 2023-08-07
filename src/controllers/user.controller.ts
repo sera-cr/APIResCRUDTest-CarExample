@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, DeleteInput, EmailParams, LoginInput, RoleParams, UpdateInput } from "../schemas/user.schema.js";
-import { createUser, deleteUser, findUserByEmail, findUsers, updateName, updatePassword, updateRole } from "../services/user.service.js";
+import { CreateUserInput, DeleteInput, EmailParams, IdParams, LoginInput, RoleParams, UpdateInput } from "../schemas/user.schema.js";
+import { createUser, deleteUser, findUserByEmail, findUserById, findUsers, updateName, updatePassword, updateRole } from "../services/user.service.js";
 import { verifyPassword } from "../utils/hash.js";
 import { server } from "../app.js";
 import pkg from "@prisma/client";
@@ -80,6 +80,28 @@ export async function getUsersHandler() {
 }
 
 export async function getUserHandler(
+  request: FastifyRequest<{
+    Params: IdParams
+  }>,
+  reply: FastifyReply
+) {
+  const id: number = parseInt(request.params.id);
+
+  try {
+    const user = await findUserById(id);
+
+    if (user) {
+      return reply.code(200).send({"id": user.id, "email": user.email, "name": user.name, "role": user.role});
+    }
+
+  } catch(err) {
+    console.error(err);
+
+    return reply.code(500);
+  }
+}
+
+export async function getUserEmailHandler(
   request: FastifyRequest<{
     Params: EmailParams
   }>,
