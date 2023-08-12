@@ -2,19 +2,36 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { CreatePostInput, EditPostSchema, IdParams } from "../schemas/post.schema.js";
 import { createPost, deletePost, getPostById, getPosts, updateContent, updatePost, updatePublished, updateTitle } from "../services/post.service.js";
 import pkg from "@prisma/client";
+import { findUserById } from "../services/user.service.js";
 const { Role } = pkg;
 
 export async function createPostHandler(
   request: FastifyRequest<{
     Body: CreatePostInput;
   }>,
+  reply: FastifyReply
 ) {
   const post = await createPost({
     ...request.body,
     authorId: request.user.id,
   });
 
-  return post;
+  // find user by id
+  const user = await findUserById(request.user.id);
+
+  return reply.code(200).send({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    published: post.published,
+    createdAt: post.createdAt,
+    updatedAt: post.updatedAt,
+    author: {
+      id: user?.id,
+      name: user?.name,
+      email: user?.email
+    }
+  });
 }
 
 export async function getPostsHandler() {

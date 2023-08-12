@@ -10,7 +10,7 @@ async function postRoutes(server: FastifyInstance) {
       schema: {
         body: $ref('createPostSchema'),
         response: {
-          201: $ref('createPostSchema')
+          201: $ref('createPostResponseSchema')
         },
         tags:["Post"],
         description: "Creates a post. Input: title, content and published. Output: title, content and published."
