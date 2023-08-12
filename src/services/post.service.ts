@@ -1,5 +1,5 @@
 import prisma from "../utils/prisma.js";
-import { CreatePostInput } from "src/schemas/post.schema.js";
+import { CreatePostInput, EditPostSchema } from "src/schemas/post.schema.js";
 
 export async function createPost(data: CreatePostInput & {authorId: number}) {
   return await prisma.post.create({
@@ -125,7 +125,7 @@ export async function updatePublished(postId: number, published: boolean) {
   return post
 }
 
- export async function deletePost(postId: number) {
+export async function deletePost(postId: number) {
   const post = await prisma.post.delete({
     where: {
       id: postId
@@ -133,4 +133,15 @@ export async function updatePublished(postId: number, published: boolean) {
   })
 
   return post
- }
+}
+
+export async function updatePost(data: EditPostSchema, postId: number)  {
+  const post = await prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: data
+  })
+
+  return post;
+}

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CreatePostInput, EditPostSchema, IdParams } from "../schemas/post.schema.js";
-import { createPost, deletePost, getPostById, getPosts, updateContent, updatePublished, updateTitle } from "../services/post.service.js";
+import { createPost, deletePost, getPostById, getPosts, updateContent, updatePost, updatePublished, updateTitle } from "../services/post.service.js";
 import pkg from "@prisma/client";
 const { Role } = pkg;
 
@@ -44,6 +44,10 @@ export async function updatePostHandler(
 
   try {
     if (request.user.id === post.authorId || request.user.role === Role.Admin) {
+      const post = await updatePost({title: body.title, content: body.content, published: body.published}, id);
+
+      return reply.code(200).send(post);
+      /*
       if (body.title) {
         const post = await updateTitle(id, body.title);
 
@@ -61,6 +65,7 @@ export async function updatePostHandler(
 
         return reply.code(200).send(post)
       }
+      */
     }
   } catch(err) {
     console.error(err);
